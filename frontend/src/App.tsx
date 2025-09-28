@@ -21,28 +21,20 @@ interface CatManagement{
   owner_id:number
 }
 
-interface CatManagement {
-  id:number,
-  name:string,
-  mood: boolean | null,
-  poop:boolean | null,
-  meal:boolean | null,
-  vitality:number,
-  record:string,
-  owner_id:number
-}
+
 
 
 const App =()=> {
   const [catManagement, setCatManagement] = useState<CatManagement[]>([]);
-  const [date, setDate] = useState(new Date())
   const openModal = () => {
     const modal = document.getElementById("modal") as HTMLDialogElement | null;
     if (modal) {
       modal.showModal();
     }
   };
-  const[HealthData, setHealthData]= useState<number[]>([]);
+  const[recordedDates, setRecordedDates] = useState<string[]>([]);
+  const[healthValueData, setHealthValueData]= useState<number[]>([]);
+  const[catName, setCatName] = useState<string[]>([])
 
 useEffect(() => {
   fetchCat();
@@ -55,8 +47,15 @@ useEffect(() => {
     })
     .then((result:CatManagement[]) => {
       setCatManagement(result);
-      const data= result.map(item => item.vitality);
-      const VitalityData = data.sort((a, b) => new Date(a.record).getTime() - new Date(b.record).getTime()).map(item => item.vitality)
+      const sortedCats = [...result].sort((a,b)=> {
+        return new Date(a.record).getTime() - new Date(b.record).getTime()
+      });
+      const dates = sortedCats.map(item => item.record);
+      const catNameData = sortedCats.map((item) => item.name);
+      const VitalityData = sortedCats.map(item => item.vitality)
+      setHealthValueData(VitalityData)
+      setRecordedDates(dates);
+      setCatName(catNameData);
     });
   };
 
@@ -75,7 +74,7 @@ useEffect(() => {
     <>
       <CHMHeader />
       <CHMBody catManagement={catManagement[0] || null}
-      SuccessModalOpen={openModal} addHealth={addHealth}
+      SuccessModalOpen={openModal} addHealth={addHealth} dates={recordedDates} healthValueData={healthValueData} catNameData={catName}
       />
       <SuccessModal catManagement={catManagement[0] || null}
       SuccessModalOpen={openModal} />

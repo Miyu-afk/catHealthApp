@@ -28,9 +28,12 @@ interface CHMBodyProps {
   catManagement: CatManagement | null;
   SuccessModalOpen: ()=>void;
   addHealth: (data: Partial<CatManagement>)=> void;
+  dates: string[];
+  healthValueData: number[];
+  catNameData: string[];
 }
 
-const CHMBody = ({ catManagement, SuccessModalOpen, addHealth }: CHMBodyProps) => {
+const CHMBody = ({ catManagement, SuccessModalOpen, addHealth,healthValueData,dates, catNameData }: CHMBodyProps) => {
   if (!catManagement) {
     return (
       <div className="flex justify-center mt-20">
@@ -289,7 +292,7 @@ const CHMBody = ({ catManagement, SuccessModalOpen, addHealth }: CHMBodyProps) =
       </div>
 
       <div className="mt-10">
-        <HealthGraph catManagement={catManagement}/>
+        <HealthGraph catManagement={catManagement} dates={dates} healthValueData={healthValueData} catNameData={catNameData}/>
       </div>
     </>
   );

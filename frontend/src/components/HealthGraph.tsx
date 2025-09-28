@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction} from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -35,32 +35,32 @@ interface CatManagement {
 }
 
 interface HealthGraphProps{
-    catManagement: CatManagement | null;  
-}
-
-function HealthGraph({catManagement}:HealthGraphProps) {
-  const today = new Date();
-  const weekAgo = new Date();
-  weekAgo.setDate(today.getDate()-6);
-  const labels = Array.from({length:7}).map((_, i)=>{
-  const pastDate = new Date(today);
-  pastDate.setDate(today.getDate() - (6- i));
-  const theMonth = today.getMonth() + 1;
-  const day = pastDate.getDate();
-
-  return `${theMonth}月${day}日`;
- });
-
-  const HealthData = () => {
-
+    catManagement: CatManagement | null;
+    dates: string[];
+    healthValueData: number[];
+    catNameData: string[];
   }
 
+function HealthGraph({catManagement, dates, healthValueData, catNameData}:HealthGraphProps) {
+  const allDate = dates.map((date, i) => ({
+    date,
+    health: healthValueData[i],
+    name: catNameData[i]
+  }))
+  const catData = allDate.filter((item) => {
+    return item.name.includes(`${name}`)
+  })
   const graphData = {
-    labels: labels,
+    labels: catData.map((item) => {
+      const date = new Date(item.date.split(" ")[0])
+      const month = (date.getMonth()+1).toString().padStart(2, "0");
+      const day = date.getDate().toString().padStart(2, "0");
+      return `${month}月${day}日`;
+    }),
     datasets: [
       {
         label: "けんこう度",
-        data: [65, 59, 60, 81, 56, 55, 80],
+        data: catData.map((item) => item.health),
         borderColor: "rgb(75, 192, 192)",
       },
     ],
