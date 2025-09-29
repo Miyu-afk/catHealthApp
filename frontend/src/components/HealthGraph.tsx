@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
   Ticks,
+  elements,
 } from "chart.js";
 import { getDate } from "date-fns";
 
@@ -67,6 +68,9 @@ function HealthGraph({catManagement, dates, healthValueData, catNameData}:Health
   };
 
  const options = {
+  onclick:(event, elements)=> {
+    
+  }
      scales: {
       y:{
         max: 100,
