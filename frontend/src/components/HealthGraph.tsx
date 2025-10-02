@@ -13,6 +13,8 @@ import {
   elements,
 } from "chart.js";
 import { getDate } from "date-fns";
+import { ActiveElement } from "chart.js/dist/plugins/plugin.tooltip";
+import { ChartEvent } from "chart.js/dist/core/core.plugins";
 
 ChartJS.register(
   CategoryScale,
@@ -68,9 +70,15 @@ function HealthGraph({catManagement, dates, healthValueData, catNameData}:Health
   };
 
  const options = {
-  onclick:(event, elements)=> {
-    
-  }
+  onClick:(event:ChartEvent, elements:ActiveElement[])=> {
+if(elements.length > 0){
+  const index = elements[0].index;
+  const LabelDate = graphData.labels[index];
+  const LabelCatData = graphData.datasets[0].data[index];
+  if(catManagement){
+  alert(`${catManagement.name}ちゃん、${LabelDate} けんこう度=${LabelCatData}`)
+}
+  }},
      scales: {
       y:{
         max: 100,
