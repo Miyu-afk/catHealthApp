@@ -54,12 +54,19 @@ function HealthGraph({catManagement, dates, healthValueData, catNameData}:Health
     return item.name.includes(`${name}`)
   })
   const graphData = {
-    labels: catData.map((item) => {
-      const date = new Date(item.date.split(" ")[0])
-      const month = (date.getMonth()+1).toString().padStart(2, "0");
-      const day = date.getDate().toString().padStart(2, "0");
+    labels: catData
+    .filter((item) =>{
+      const recordDate = new Date(item.date.split(" ")[0]);
+      const sevenDayAgo = new Date();
+      sevenDayAgo.setDate(sevenDayAgo.getDate() - 7 );
+      return recordDate >= sevenDayAgo;
+    })
+    .map((item) => {      
+      const date = new Date(item.date);
+      const month = String(date.getMonth()+1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
       return `${month}月${day}日`;
-    }),
+      }),
     datasets: [
       {
         label: "けんこう度",

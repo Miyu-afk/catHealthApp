@@ -11,29 +11,37 @@ import React, { useState } from "react";
 import ToggleButton from "./ToggleButton";
 import CheckButton from "./CheckButton";
 import NoCheckButton from "./NoCheckButton";
-
+import SelectCats from "./SelectCats";
+import Memo from "./Memo";
 
 interface CatManagement {
-  id:number,
-  name:string,
-  mood: boolean | null,
-  poop:boolean | null,
-  meal:boolean | null,
-  vitality:number,
-  record:string,
-  owner_id:number
+  id: number;
+  name: string;
+  mood: boolean | null;
+  poop: boolean | null;
+  meal: boolean | null;
+  vitality: number;
+  record: string;
+  owner_id: number;
 }
 
 interface CHMBodyProps {
   catManagement: CatManagement | null;
-  SuccessModalOpen: ()=>void;
-  addHealth: (data: Partial<CatManagement>)=> void;
+  SuccessModalOpen: () => void;
+  addHealth: (data: Partial<CatManagement>) => void;
   dates: string[];
   healthValueData: number[];
   catNameData: string[];
 }
 
-const CHMBody = ({ catManagement, SuccessModalOpen, addHealth,healthValueData,dates, catNameData }: CHMBodyProps) => {
+const CHMBody = ({
+  catManagement,
+  SuccessModalOpen,
+  addHealth,
+  healthValueData,
+  dates,
+  catNameData,
+}: CHMBodyProps) => {
   if (!catManagement) {
     return (
       <div className="flex justify-center mt-20">
@@ -51,103 +59,108 @@ const CHMBody = ({ catManagement, SuccessModalOpen, addHealth,healthValueData,da
   const [healthValue, setHealthValue] = useState(50);
   const [checkButtonOn, setCheckButtonOn] = useState(false);
   const [noCheckButtonOn, setNoCheckButtonOn] = useState(false);
-  
+  const [memoData, setMemoData] = useState("");
+
   const healthObj = [
-    {name:'きげん',
-      tags: ()=>{
-        return(
+    {
+      name: "きげん",
+      tags: () => {
+        return (
           <>
-          <ToggleButton
-            isOn={smileOn}
-            onToggle={() => setSmileOn((prev) => !prev)}
-            onIcon={<SmileIconOn />}
-            offIcon={<SmileIcon />}
-            onOrOff={frownOn}
-          />
-          
-          <ToggleButton
-            isOn={frownOn}
-            onToggle={() => setFrownOn((prev) => !prev)}
-            onIcon={<FrownIconOn />}
-            offIcon={<FrownIcon />}
-            onOrOff={smileOn}
-          />
+            <ToggleButton
+              isOn={smileOn}
+              onToggle={() => setSmileOn((prev) => !prev)}
+              onIcon={<SmileIconOn />}
+              offIcon={<SmileIcon />}
+              onOrOff={frownOn}
+            />
+
+            <ToggleButton
+              isOn={frownOn}
+              onToggle={() => setFrownOn((prev) => !prev)}
+              onIcon={<FrownIconOn />}
+              offIcon={<FrownIcon />}
+              onOrOff={smileOn}
+            />
           </>
         );
       },
-      },{
-        name:'トイレ',
-        tags:()=>{
-          return(
-            <>
+    },
+    {
+      name: "トイレ",
+      tags: () => {
+        return (
+          <>
             <ToggleButton
-            isOn={poopGoodOn}
-            onToggle={() => {
-              setPoopGoodOn((prev) => !prev);
-            }}
-            onIcon={<GoodButtonOn />}
-            offIcon={<GoodButton />}
-            onOrOff={poopBadOn}
-          />
+              isOn={poopGoodOn}
+              onToggle={() => {
+                setPoopGoodOn((prev) => !prev);
+              }}
+              onIcon={<GoodButtonOn />}
+              offIcon={<GoodButton />}
+              onOrOff={poopBadOn}
+            />
 
-          <ToggleButton
-            isOn={poopBadOn}
-            onToggle={() => setPoopBadOn((prev) => !prev)}
-            onIcon={<BadButtonOn />}
-            offIcon={<BadButton />}
-            onOrOff={poopGoodOn}
-          />
-            </>
-          );
-        },
-      },{
-        name:'ごはん',
-        tags:()=>{
-          return(
-            <>
             <ToggleButton
-            isOn={mealGoodOn}
-            onToggle={() => setMealGoodOn((prev) => !prev)}
-            onIcon={<GoodButtonOn />}
-            offIcon={<GoodButton />}
-            onOrOff={mealBadOn}
-          />
+              isOn={poopBadOn}
+              onToggle={() => setPoopBadOn((prev) => !prev)}
+              onIcon={<BadButtonOn />}
+              offIcon={<BadButton />}
+              onOrOff={poopGoodOn}
+            />
+          </>
+        );
+      },
+    },
+    {
+      name: "ごはん",
+      tags: () => {
+        return (
+          <>
+            <ToggleButton
+              isOn={mealGoodOn}
+              onToggle={() => setMealGoodOn((prev) => !prev)}
+              onIcon={<GoodButtonOn />}
+              offIcon={<GoodButton />}
+              onOrOff={mealBadOn}
+            />
 
-          <ToggleButton
-            isOn={mealBadOn}
-            onToggle={() => {
-              setMealBadOn((prev) => !prev);
-            }}
-            onIcon={<BadButtonOn />}
-            offIcon={<BadButton />}
-            onOrOff={mealGoodOn}
-          />
-            </>
-          );
-        },
-      },{
-        name:'けんこう',
-        tags:()=>{
-          return(
-            <>
+            <ToggleButton
+              isOn={mealBadOn}
+              onToggle={() => {
+                setMealBadOn((prev) => !prev);
+              }}
+              onIcon={<BadButtonOn />}
+              offIcon={<BadButton />}
+              onOrOff={mealGoodOn}
+            />
+          </>
+        );
+      },
+    },
+    {
+      name: "けんこう",
+      tags: () => {
+        return (
+          <>
             <input
-            className="mt-1"
-            type="range"
-            min="0"
-            max="100"
-            step="1"
-            value={healthValue}
-            onChange={(e) => {
-              setHealthValue(Number(e.target.value));
-            }}
-          ></input>
-          <span className="span-element text-xl pl-2">{healthValue}</span>
-            </>
-          );
-        },
-      }
-  ]
-  const allClean =()=> {
+              className="mt-1"
+              type="range"
+              min="0"
+              max="100"
+              step="1"
+              value={healthValue}
+              onChange={(e) => {
+                setHealthValue(Number(e.target.value));
+              }}
+            ></input>
+            <span className="span-element text-xl pl-2">{healthValue}</span>
+          </>
+        );
+      },
+    },
+  ];
+  const allClean = () => {
     setSmileOn(false);
     setFrownOn(false);
     setPoopGoodOn(false);
@@ -155,23 +168,27 @@ const CHMBody = ({ catManagement, SuccessModalOpen, addHealth,healthValueData,da
     setMealGoodOn(false);
     setMealBadOn(false);
     setHealthValue(50);
-  }
+  };
   return (
     <>
+      <div className="flex justify-center mt-20 text-2xl">
+        <SelectCats catManagement={catManagement} />
+      </div>
       <div className="flex justify-center mt-20 text-2xl">
         <p>おなまえ：{catManagement.name}ちゃん</p>
       </div>
       <div className="grid grid-cols-2 mt-10">
-        {healthObj.map((obj)=>(
+        {healthObj.map((obj) => (
           <>
-          <div className="text-right mr-10">
-            <span className="text-xl">{obj.name}</span>
-          </div>
-          <div className="flex justify-start items-center ">
-            {obj.tags()}
-          </div>
+            <div className="text-right mr-10">
+              <span className="text-xl">{obj.name}</span>
+            </div>
+            <div className="flex justify-start items-center ">{obj.tags()}</div>
           </>
         ))}
+      </div>
+      <div className="flex justify-center">
+      <Memo  />
       </div>
 
       {/* <div className="flex justify-center mt-15">
@@ -268,31 +285,43 @@ const CHMBody = ({ catManagement, SuccessModalOpen, addHealth,healthValueData,da
       </div> */}
 
       <div className="flex justify-center mt-15">
-        <CheckButton onClick={()=>{
-          const dataToSave: Partial<CatManagement> = {
-          name:catManagement.name,
-          vitality: healthValue,
-          record: new Date().toISOString().split('T')[0],
-          owner_id:catManagement.owner_id
-        };
+        <CheckButton
+          onClick={() => {
+            const dataToSave: Partial<CatManagement> = {
+              name: catManagement.name,
+              vitality: healthValue,
+              record: new Date().toISOString().split("T")[0],
+              owner_id: catManagement.owner_id,
+            };
 
-          if(smileOn)dataToSave.mood = true;
-          else if(frownOn)dataToSave.mood = false;
+            if (smileOn) dataToSave.mood = true;
+            else if (frownOn) dataToSave.mood = false;
 
-          if(poopGoodOn)dataToSave.poop=true;
-          else if(poopBadOn) dataToSave.poop =false;
+            if (poopGoodOn) dataToSave.poop = true;
+            else if (poopBadOn) dataToSave.poop = false;
 
-          if(mealGoodOn)dataToSave.meal =true;
-          else if(mealBadOn)dataToSave.meal=false;
-          
-              addHealth(dataToSave);
-              allClean();
-              SuccessModalOpen()}} />
-        <NoCheckButton onClick={()=>{allClean()}}/>
+            if (mealGoodOn) dataToSave.meal = true;
+            else if (mealBadOn) dataToSave.meal = false;
+
+            addHealth(dataToSave);
+            allClean();
+            SuccessModalOpen();
+          }}
+        />
+        <NoCheckButton
+          onClick={() => {
+            allClean();
+          }}
+        />
       </div>
 
       <div className="mt-10">
-        <HealthGraph catManagement={catManagement} dates={dates} healthValueData={healthValueData} catNameData={catNameData}/>
+        <HealthGraph
+          catManagement={catManagement}
+          dates={dates}
+          healthValueData={healthValueData}
+          catNameData={catNameData}
+        />
       </div>
     </>
   );
