@@ -168,6 +168,7 @@ const CHMBody = ({
     setMealGoodOn(false);
     setMealBadOn(false);
     setHealthValue(50);
+    setMemoData("");
   };
   return (
     <>
@@ -188,7 +189,11 @@ const CHMBody = ({
         ))}
       </div>
       <div className="flex justify-center">
-      <Memo  />
+      <Memo  onChange={(e) => {
+        const textValue = e.target.value;
+        setMemoData(textValue)
+      }}
+        />
       </div>
 
       {/* <div className="flex justify-center mt-15">
@@ -292,6 +297,7 @@ const CHMBody = ({
               vitality: healthValue,
               record: new Date().toISOString().split("T")[0],
               owner_id: catManagement.owner_id,
+              ...(memoData.trim() && {memo: memoData}) 
             };
 
             if (smileOn) dataToSave.mood = true;

@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -16,7 +16,7 @@ const connection = mysql.createConnection({
   database: 'db_cathealth'
 })
 
-connection.connect ((error) => {
+connection.connect((error) => {
   if(error) throw error;
   console.log('接続が成功しました');
   });
@@ -42,13 +42,29 @@ app.get('/cats', (req, res) => {
   });
 });
 
-app.post('/cats', (req, res) => {
-  const{name, mood, poop, meal ,vitality, record, owner_id} = req.body;
-  const insertQuery = `INSERT INTO catHealth(id, name, mood, poop, meal, vitality, record, owner_id) VALUES(null, "${name}, ${mood}, ${poop}, ${meal}, ${vitality}, "${record}, ${owner_id})`;
+app.post('/cats', async (req, res) => {
+  const{name, mood, poop, meal ,vitality, record, owner_id, memo} = req.body;
+  const existingRecord = await connection.promise().query('SELECT * FROM catHealth WHERE name= ? AND record= ?, [name, record] ');
+
+  if (existingRecord.length > 0){
+   await connection.promise().query( `UPDATE catHealth 
+   SET mood = ?, poop = ?, meal = ?, vitality = ? , memo = ?
+   WHERE name = ? AND record = ?`,
+  [mood, poop, meal, vitality, memo, name, record] 
+);
+  (err, result) =>{
+    if(err) throw error;
+  }
+}else{
+   const insertQuery = `
+  INSERT INTO catHealth (name, mood, poop, meal, vitality, record, owner_id, memo)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+  await connection.promise().query(query, [name, mood, poop, meal, vitality, record, owner_id, memo]);;
   connection.query(insertQuery, (error) => {
     if(error) throw error;
     res.end()
   })
+}
 });
 
 app.listen(port, () => {
