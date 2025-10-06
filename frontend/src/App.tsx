@@ -35,7 +35,7 @@ const App =()=> {
   const[recordedDates, setRecordedDates] = useState<string[]>([]);
   const[healthValueData, setHealthValueData]= useState<number[]>([]);
   const[catName, setCatName] = useState<string[]>([])
-
+  const[catList, setCatList] = useState<Record<number, CatManagement[]>>({});
 useEffect(() => {
   fetchCat();
 }, []);
@@ -47,6 +47,16 @@ useEffect(() => {
     })
     .then((result:CatManagement[]) => {
       setCatManagement(result);
+      const groupedByOwner :Record<number, CatManagement[]> = {};
+      result.forEach((cat) => {
+        const ownerId = cat.owner_id;
+        if(!groupedByOwner[ownerId]){
+          groupedByOwner[ownerId] = [];
+        }
+        groupedByOwner[ownerId].push(cat);
+      })
+      for(const owner_id in groupedByOwner){
+        groupedByOwner[owner_id].sort((a, b) => new Date(a.record).getTime() - new Date(b.record).getTime())}
       const sortedCats = [...result].sort((a,b)=> {
         return new Date(a.record).getTime() - new Date(b.record).getTime()
       });
@@ -56,6 +66,7 @@ useEffect(() => {
       setHealthValueData(VitalityData)
       setRecordedDates(dates);
       setCatName(catNameData);
+      setCatList(groupedByOwner);
     });
   };
 
@@ -66,6 +77,10 @@ useEffect(() => {
     headers:{
       'Content-Type': 'application/json',
     },
+  }).then(()=>{
+    fetchCat();
+  }).catch(error => {
+    console.error('Error:', error);
   })
 };
 
@@ -74,7 +89,7 @@ useEffect(() => {
     <>
       <CHMHeader />
       <CHMBody catManagement={catManagement[0] || null}
-      SuccessModalOpen={openModal} addHealth={addHealth} dates={recordedDates} healthValueData={healthValueData} catNameData={catName}
+      SuccessModalOpen={openModal} addHealth={addHealth} dates={recordedDates} healthValueData={healthValueData} catNameData={catName} catList={catList} 
       />
       <SuccessModal catManagement={catManagement[0] || null}
       SuccessModalOpen={openModal} />

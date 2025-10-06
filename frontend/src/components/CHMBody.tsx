@@ -32,6 +32,7 @@ interface CHMBodyProps {
   dates: string[];
   healthValueData: number[];
   catNameData: string[];
+  catList:Record<number, CatManagement[]>;
 }
 
 const CHMBody = ({
@@ -41,6 +42,7 @@ const CHMBody = ({
   healthValueData,
   dates,
   catNameData,
+  catList
 }: CHMBodyProps) => {
   if (!catManagement) {
     return (
@@ -60,6 +62,8 @@ const CHMBody = ({
   const [checkButtonOn, setCheckButtonOn] = useState(false);
   const [noCheckButtonOn, setNoCheckButtonOn] = useState(false);
   const [memoData, setMemoData] = useState("");
+  const [targetCat, setTargetCat] = useState(catManagement)
+
 
   const healthObj = [
     {
@@ -172,9 +176,11 @@ const CHMBody = ({
   };
   return (
     <>
+      {Object.values(catList).flat().length > 1 ?(
       <div className="flex justify-center mt-20 text-2xl">
-        <SelectCats catManagement={catManagement} />
+        <SelectCats catList={catList} targetCat={targetCat} />
       </div>
+      ):null}
       <div className="flex justify-center mt-20 text-2xl">
         <p>おなまえ：{catManagement.name}ちゃん</p>
       </div>
@@ -329,6 +335,7 @@ const CHMBody = ({
           catNameData={catNameData}
         />
       </div>
+      <button onClick={(prev) => {}}></button>
     </>
   );
 };

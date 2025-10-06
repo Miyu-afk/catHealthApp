@@ -10,11 +10,12 @@ interface CatManagement {
 }
 
 interface SelectCatsProps {
-  catList: number[];
+  catList:Record<number, CatManagement[]>;
+  targetCat: CatManagement;
 }
 
 const SelectCats = (props: SelectCatsProps) => {
-  if (!props.catList) {
+  if (!props.catList || Object.keys(props.catList).length === 0) {
     return null;
   }
   return (
