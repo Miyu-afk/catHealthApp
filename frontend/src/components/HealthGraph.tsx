@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction} from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -27,45 +27,57 @@ ChartJS.register(
 );
 
 interface CatManagement {
-  id:number,
-  name:string,
-  mood: boolean | null,
-  poop:boolean | null,
-  meal:boolean | null,
-  vitality:number,
-  record:string,
-  owner_id:number
+  id: number;
+  name: string;
+  mood: boolean | null;
+  poop: boolean | null;
+  meal: boolean | null;
+  vitality: number;
+  record: string;
+  owner_id: number;
 }
 
-interface HealthGraphProps{
-    catManagement: CatManagement | null;
-    dates: string[];
-    healthValueData: number[];
-    catNameData: string[];
-  }
+interface HealthGraphProps {
+  catManagement: CatManagement | null;
+  dates: string[];
+  healthValueData: number[];
+  catNameData: string[];
+  setCurrentWeek: Dispatch<SetStateAction<Date>>;
+  currentWeek: Date;
+}
 
-function HealthGraph({catManagement, dates, healthValueData, catNameData}:HealthGraphProps) {
+function HealthGraph({
+  catManagement,
+  dates,
+  healthValueData,
+  catNameData,
+  setCurrentWeek,
+  currentWeek
+}: HealthGraphProps) {
+  const [week, setWeek] = useState(new Date());
+  let weeks = 1;
+  const newDate = new Date(currentWeek);
   const allDate = dates.map((date, i) => ({
     date,
     health: healthValueData[i],
-    name: catNameData[i]
-  }))
+    name: catNameData[i],
+  }));
   const catData = allDate.filter((item) => {
-    return item.name.includes(`${name}`)
-  })
+    return item.name.includes(`${name}`);
+  });
   const graphData = {
     labels: catData
-    .filter((item) =>{
-      const recordDate = new Date(item.date.split(" ")[0]);
-      const sevenDayAgo = new Date();
-      sevenDayAgo.setDate(sevenDayAgo.getDate() - 7 );
-      return recordDate >= sevenDayAgo;
-    })
-    .map((item) => {      
-      const date = new Date(item.date);
-      const month = String(date.getMonth()+1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
-      return `${month}月${day}日`;
+      .filter((item) => {
+        const recordDate = new Date(item.date.split(" ")[0]);
+        const sevenDayAgo = new Date();
+        sevenDayAgo.setDate(sevenDayAgo.getDate() - 7);
+        return recordDate >= sevenDayAgo;
+      })
+      .map((item) => {
+        const date = new Date(item.date);
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${month}月${day}日`;
       }),
     datasets: [
       {
@@ -76,28 +88,30 @@ function HealthGraph({catManagement, dates, healthValueData, catNameData}:Health
     ],
   };
 
- const options = {
-  onClick:(event:ChartEvent, elements:ActiveElement[])=> {
-if(elements.length > 0){
-  const index = elements[0].index;
-  const LabelDate = graphData.labels[index];
-  const LabelCatData = graphData.datasets[0].data[index];
-  if(catManagement){
-  alert(`${catManagement.name}ちゃん、${LabelDate} けんこう度=${LabelCatData}`)
-}
-  }},
-     scales: {
-      y:{
+  const options = {
+    onClick: (event: ChartEvent, elements: ActiveElement[]) => {
+      if (elements.length > 0) {
+        const index = elements[0].index;
+        const LabelDate = graphData.labels[index];
+        const LabelCatData = graphData.datasets[0].data[index];
+        if (catManagement) {
+          alert(
+            `${catManagement.name}ちゃん、${LabelDate} けんこう度=${LabelCatData}`
+          );
+        }
+      }
+    },
+    scales: {
+      y: {
         max: 100,
         min: 20,
         ticks: {
-          stepSize: 20
-      }
-    }, 
-    x:{      
+          stepSize: 20,
+        },
+      },
+      x: {},
     },
-   },
-   maintainAspectRatio: false
+    maintainAspectRatio: false,
   };
 
   const divStyle: React.CSSProperties = {
@@ -106,13 +120,18 @@ if(elements.length > 0){
   };
 
   return (
-    <div className="App" style={divStyle}>
-      <Line
-        data={graphData}
-        options={options}
-        id="chart-key"
-      />
-    </div>
+    <>
+      <div className="App" style={divStyle}>
+        <Line data={graphData} options={options} id="chart-key" />
+      </div>
+      <div className="flex">
+        <button className="justify-items-start" onClick={(e) => {newDate.setDate(newDate.getDate() - weeks * 7);
+    setCurrentWeek(newDate)}}>前へ</button>
+        <button className="justify-items-end" onClick={(e) => {newDate.setDate(newDate.getDate() + weeks * 7);
+    setCurrentWeek(newDate)
+}}>次へ</button>
+      </div>
+    </>
   );
 }
 

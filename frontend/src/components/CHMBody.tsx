@@ -63,7 +63,7 @@ const CHMBody = ({
   const [noCheckButtonOn, setNoCheckButtonOn] = useState(false);
   const [memoData, setMemoData] = useState("");
   const [targetCat, setTargetCat] = useState(catManagement)
-
+  const [currentWeek, setCurrentWeek] = useState(new Date())
 
   const healthObj = [
     {
@@ -333,6 +333,8 @@ const CHMBody = ({
           dates={dates}
           healthValueData={healthValueData}
           catNameData={catNameData}
+          setCurrentWeek={setCurrentWeek}
+          currentWeek={currentWeek}
         />
       </div>
       <button onClick={(prev) => {}}></button>
