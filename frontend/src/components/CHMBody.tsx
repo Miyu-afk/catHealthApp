@@ -33,6 +33,7 @@ interface CHMBodyProps {
   healthValueData: number[];
   catNameData: string[];
   catList:Record<number, CatManagement[]>;
+  onCatSelect: (cat:CatManagement) => void;
 }
 
 const CHMBody = ({
@@ -178,7 +179,7 @@ const CHMBody = ({
     <>
       {Object.values(catList).flat().length > 1 ?(
       <div className="flex justify-center mt-20 text-2xl">
-        <SelectCats catList={catList} targetCat={targetCat} />
+        <SelectCats catList={catList} targetCat={targetCat} onSelect={setTargetCat}/>
       </div>
       ):null}
       <div className="flex justify-center mt-20 text-2xl">

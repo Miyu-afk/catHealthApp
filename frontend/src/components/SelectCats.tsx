@@ -12,10 +12,12 @@ interface CatManagement {
 interface SelectCatsProps {
   catList:Record<number, CatManagement[]>;
   targetCat: CatManagement;
+  onSelect: (cat: CatManagement) => void;
 }
 
-const SelectCats = (props: SelectCatsProps) => {
-  if (!props.catList || Object.keys(props.catList).length === 0) {
+const SelectCats = ({catList, targetCat, onSelect} : SelectCatsProps) => {
+  const cats = Object.values(catList).flat();
+  if (!catList || Object.keys(catList).length === 0) {
     return null;
   }
   return (
