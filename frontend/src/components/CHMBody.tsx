@@ -33,7 +33,6 @@ interface CHMBodyProps {
   healthValueData: number[];
   catNameData: string[];
   catList:Record<number, CatManagement[]>;
-  onCatSelect: (cat:CatManagement) => void;
 }
 
 const CHMBody = ({
@@ -63,7 +62,7 @@ const CHMBody = ({
   const [checkButtonOn, setCheckButtonOn] = useState(false);
   const [noCheckButtonOn, setNoCheckButtonOn] = useState(false);
   const [memoData, setMemoData] = useState("");
-  const [targetCat, setTargetCat] = useState(catManagement)
+  const [targetCat, setTargetCat] = useState<CatManagement>(catManagement!);
   const [currentWeek, setCurrentWeek] = useState(new Date())
 
   const healthObj = [
@@ -175,6 +174,7 @@ const CHMBody = ({
     setHealthValue(50);
     setMemoData("");
   };
+  
   return (
     <>
       {Object.values(catList).flat().length > 1 ?(
