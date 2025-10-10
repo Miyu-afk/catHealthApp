@@ -5,7 +5,7 @@ const SmileIcon = () => {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="h-8 w-8 ml-3"
+        className="h-5 w-5 ml-3"
       >
         <path
           fill-rule="evenodd"

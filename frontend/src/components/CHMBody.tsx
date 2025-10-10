@@ -158,7 +158,7 @@ const CHMBody = ({
                 setHealthValue(Number(e.target.value));
               }}
             ></input>
-            <span className="span-element text-xl pl-2">{healthValue}</span>
+            <span className="span-element text-l pl-2">{healthValue}</span>
           </>
         );
       },
@@ -178,24 +178,24 @@ const CHMBody = ({
   return (
     <>
       {Object.values(catList).flat().length > 1 ?(
-      <div className="flex justify-center mt-20 text-2xl">
+      <div className="flex justify-center mt-15 text-2xl">
         <SelectCats catList={catList} targetCat={targetCat} onSelect={setTargetCat}/>
       </div>
       ):null}
-      <div className="flex justify-center mt-20 text-2xl">
+      <div className="flex justify-center mt-5 text-l">
         <p>おなまえ：{catManagement.name}ちゃん</p>
       </div>
       <div className="grid grid-cols-2 mt-10">
         {healthObj.map((obj) => (
           <>
-            <div className="text-right mr-10">
-              <span className="text-xl">{obj.name}</span>
+            <div className="text-right ">
+              <span className="text-l">{obj.name}</span>
             </div>
-            <div className="flex justify-start items-center ">{obj.tags()}</div>
+            <div className="flex items-center ">{obj.tags()}</div>
           </>
         ))}
       </div>
-      <div className="flex justify-center">
+      <div className="flex w-50">
       <Memo  onChange={(e) => {
         const textValue = e.target.value;
         setMemoData(textValue)
@@ -328,7 +328,7 @@ const CHMBody = ({
         />
       </div>
 
-      <div className="mt-10">
+      <div className="mt-10 px-4">
         <HealthGraph
           catManagement={catManagement}
           dates={dates}

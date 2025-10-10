@@ -10,6 +10,7 @@
   "proxy": "http://localhost:3000",
   "dependencies": {
     "@tailwindcss/vite": "^4.1.12",
+    "@types/css-modules": "^1.0.5",
     "axios": "^1.12.2",
     "chart.js": "^4.5.0",
     "create-vite": "^7.1.1",
@@ -19,7 +20,8 @@
     "react-dom": "^18.3.1",
     "react-is": "^19.1.1",
     "react-router-dom": "^7.9.1",
-    "recharts": "^3.1.2"
+    "recharts": "^3.1.2",
+    "sass": "^1.93.2"
   },
   "devDependencies": {
     "@babel/core": "^7.28.4",

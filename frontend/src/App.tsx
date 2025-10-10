@@ -66,7 +66,7 @@ useEffect(() => {
       setHealthValueData(VitalityData)
       setRecordedDates(dates);
       setCatName(catNameData);
-      setCatList(groupedByOwner);
+      setCatList(groupedByOwner);      
     });
   };
 
@@ -83,6 +83,8 @@ useEffect(() => {
     console.error('Error:', error);
   })
 };
+
+
 
   
   return (
