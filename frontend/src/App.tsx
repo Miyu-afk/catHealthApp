@@ -1,6 +1,7 @@
 
 
 import CHMBody from './components/CHMBody';
+import CHMFooter from './components/CHMFooter';
 import CHMHeader from './components/CHMHeader';
 import SuccessModal from './components/SuccessModal'
 import {useState, useEffect} from 'react';
@@ -18,7 +19,8 @@ interface CatManagement{
   meal:boolean | null,
   vitality:number,
   record:string,
-  owner_id:number
+  owner_id:number,
+  users_name: string;
 }
 
 
@@ -32,6 +34,7 @@ const App =()=> {
       modal.showModal();
     }
   };
+
   const[recordedDates, setRecordedDates] = useState<string[]>([]);
   const[healthValueData, setHealthValueData]= useState<number[]>([]);
   const[catName, setCatName] = useState<string[]>([])
@@ -46,7 +49,7 @@ useEffect(() => {
       return responseData.json();
     })
     .then((result:CatManagement[]) => {
-      setCatManagement(result);
+      setCatManagement(result)
       const groupedByOwner :Record<number, CatManagement[]> = {};
       result.forEach((cat) => {
         const ownerId = cat.owner_id;
@@ -55,8 +58,6 @@ useEffect(() => {
         }
         groupedByOwner[ownerId].push(cat);
       })
-      for(const owner_id in groupedByOwner){
-        groupedByOwner[owner_id].sort((a, b) => new Date(a.record).getTime() - new Date(b.record).getTime())}
       const sortedCats = [...result].sort((a,b)=> {
         return new Date(a.record).getTime() - new Date(b.record).getTime()
       });
@@ -66,9 +67,10 @@ useEffect(() => {
       setHealthValueData(VitalityData)
       setRecordedDates(dates);
       setCatName(catNameData);
-      setCatList(groupedByOwner);      
+      setCatList(groupedByOwner); 
     });
   };
+  
 
   const addHealth = (newHealthData:Partial<CatManagement>) => {
   fetch(API_URL, {
@@ -95,6 +97,7 @@ useEffect(() => {
       />
       <SuccessModal catManagement={catManagement[0] || null}
       SuccessModalOpen={openModal} />
+      <CHMFooter />
     </> 
   )
 }

@@ -15,11 +15,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 10px;
 }
 
 .memoArea{
   border: 1px solid #009688;
   border-radius: 0.5rem;
+  resize: none;
 }
 
 .inputSet{

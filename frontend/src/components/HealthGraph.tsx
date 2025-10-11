@@ -69,9 +69,9 @@ function HealthGraph({
     labels: catData
       .filter((item) => {
         const recordDate = new Date(item.date.split(" ")[0]);
-        const sevenDayAgo = new Date();
-        sevenDayAgo.setDate(sevenDayAgo.getDate() - 7);
-        return recordDate >= sevenDayAgo;
+        const weekStart = new Date(currentWeek);
+        weekStart.setDate(currentWeek.getDate() - 7)
+        return recordDate >= weekStart && recordDate <= currentWeek;
       })
       .map((item) => {
         const date = new Date(item.date);
@@ -125,9 +125,10 @@ function HealthGraph({
       <div className="App" style={divStyle}>
         <Line data={graphData} options={options} id="chart-key" />
       </div>
-      <div className="flex justify-between">
+      <div className="flex justify-between ml-10 mr-10">
         <button
-          onClick={(e) => {
+          className="text-sm"
+          onClick={() => {
             const prevWeek = new Date(currentWeek);
             prevWeek.setDate(currentWeek.getDate() - 7);
             setCurrentWeek(prevWeek);
@@ -136,7 +137,8 @@ function HealthGraph({
           前へ
         </button>
         <button
-          onClick={(e) => {
+          className="text-sm"
+          onClick={() => {
             const nextWeek = new Date(currentWeek);
             nextWeek.setDate(currentWeek.getDate() + 7);
             setCurrentWeek(nextWeek);

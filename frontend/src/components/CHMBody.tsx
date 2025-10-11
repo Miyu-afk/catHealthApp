@@ -13,7 +13,7 @@ import CheckButton from "./CheckButton";
 import NoCheckButton from "./NoCheckButton";
 import SelectCats from "./SelectCats";
 import Memo from "./Memo";
-import styles from "../css/Body.module.scss";
+import styles from "../css/Body.module.scss"
 
 interface CatManagement {
   id: number;
@@ -33,7 +33,7 @@ interface CHMBodyProps {
   dates: string[];
   healthValueData: number[];
   catNameData: string[];
-  catList:Record<number, CatManagement[]>;
+  catList: Record<number, CatManagement[]>;
 }
 
 const CHMBody = ({
@@ -43,7 +43,7 @@ const CHMBody = ({
   healthValueData,
   dates,
   catNameData,
-  catList
+  catList,
 }: CHMBodyProps) => {
   if (!catManagement) {
     return (
@@ -64,7 +64,7 @@ const CHMBody = ({
   const [noCheckButtonOn, setNoCheckButtonOn] = useState(false);
   const [memoData, setMemoData] = useState("");
   const [targetCat, setTargetCat] = useState<CatManagement>(catManagement!);
-  const [currentWeek, setCurrentWeek] = useState(new Date())
+  const [currentWeek, setCurrentWeek] = useState(new Date());
 
   const healthObj = [
     {
@@ -175,137 +175,64 @@ const CHMBody = ({
     setHealthValue(50);
     setMemoData("");
   };
-  
+
   return (
     <>
-      {Object.values(catList).flat().length > 1 ?(
-      <div className="flex justify-center mt-18 text-2xl">
-        <SelectCats catList={catList} targetCat={targetCat} onSelect={setTargetCat}/>
-      </div>
-      ):null}
+      {Object.values(catList).flat().length > 1 ? (
+        <div className="flex justify-center mt-18 text-2xl">
+          <SelectCats
+            catList={catList}
+            targetCat={targetCat}
+            selectTargetCat={setTargetCat}
+          />
+        </div>
+      ) : null}
       <div className="flex justify-center mt-5 text-l">
         <p>おなまえ：{catManagement.name}ちゃん</p>
       </div>
       <div className="grid grid-cols-2 mt-10">
         {healthObj.map((obj) => (
           <>
-            <div className="text-right ">
+            <div className="flex text-right mr-4 items-center justify-end">
               <span className="text-l">{obj.name}</span>
             </div>
-            <div className="flex items-center ">{obj.tags()}</div>
+            <div className="flex items-center">{obj.tags()}</div>
           </>
         ))}
       </div>
       <div className="flex justify-center">
-      <Memo  onChange={(e) => {
-        const textValue = e.target.value;
-        setMemoData(textValue)
-      }}
+        <Memo
+          onChange={(e) => {
+            const textValue = e.target.value;
+            setMemoData(textValue);
+          }}
         />
       </div>
-
-      {/* <div className="flex justify-center mt-15">
-        <div>
-          <span className="text-2xl">きげん</span>
-        </div>
-        <div className="flex ml-35">
-          <ToggleButton
-            isOn={smileOn}
-            onToggle={() => setSmileOn((prev) => !prev)}
-            onIcon={<SmileIconOn />}
-            offIcon={<SmileIcon />}
-            onOrOff={frownOn}
-          />
-
-          <ToggleButton
-            isOn={frownOn}
-            onToggle={() => setFrownOn((prev) => !prev)}
-            onIcon={<FrownIconOn />}
-            offIcon={<FrownIcon />}
-            onOrOff={smileOn}
-          />
-        </div>
-      </div>
-
-      <div className="flex justify-center mt-5">
-        <div>
-          <span className="text-2xl">トイレ</span>
-        </div>
-        <div className="flex ml-35">
-          <ToggleButton
-            isOn={poopGoodOn}
-            onToggle={() => {
-              setPoopGoodOn((prev) => !prev);
-            }}
-            onIcon={<GoodButtonOn />}
-            offIcon={<GoodButton />}
-            onOrOff={poopBadOn}
-          />
-
-          <ToggleButton
-            isOn={poopBadOn}
-            onToggle={() => setPoopBadOn((prev) => !prev)}
-            onIcon={<BadButtonOn />}
-            offIcon={<BadButton />}
-            onOrOff={poopGoodOn}
-          />
-        </div>
-      </div>
-
-      <div className="flex justify-center mt-5">
-        <div>
-          <span className="text-2xl">げんき</span>
-        </div>
-        <div className="flex ml-35">
-          <ToggleButton
-            isOn={mealGoodOn}
-            onToggle={() => setMealGoodOn((prev) => !prev)}
-            onIcon={<GoodButtonOn />}
-            offIcon={<GoodButton />}
-            onOrOff={mealBadOn}
-          />
-
-          <ToggleButton
-            isOn={mealBadOn}
-            onToggle={() => {
-              setMealBadOn((prev) => !prev);
-            }}
-            onIcon={<BadButtonOn />}
-            offIcon={<BadButton />}
-            onOrOff={mealGoodOn}
-          />
-        </div>
-      </div>
-
-      <div className="flex justify-center mt-5">
-        <div>
-          <span className="text-2xl">けんこう</span>
-        </div>
-        <div className="flex items-center ml-35">
-          <input
-            className="mt-1"
-            type="range"
-            min="0"
-            max="100"
-            step="1"
-            value={healthValue}
-            onChange={(e) => {
-              setHealthValue(Number(e.target.value));
-            }}
-          ></input>
-          <span className="span-element text-xl pl-2">{healthValue}</span>
-        </div>
-      </div> */}
 
       <div className="flex justify-center mt-8">
         <CheckButton
           onClick={() => {
+            const hasInput =
+              smileOn ||
+              frownOn ||
+              poopGoodOn ||
+              poopBadOn ||
+              mealGoodOn ||
+              mealBadOn ||
+              healthValue !== 50 ||
+              memoData.trim() !== "";
+
+            if (!hasInput) {
+              alert("入力してください");
+              return;
+            }
+
             const dataToSave: Partial<CatManagement> = {
               name: catManagement.name,
               vitality: healthValue,
               record: new Date().toISOString().split("T")[0],
               owner_id: catManagement.owner_id,
-              ...(memoData.trim() && {memo: memoData}) 
+              ...(memoData.trim() && { memo: memoData }),
             };
 
             if (smileOn) dataToSave.mood = true;
@@ -329,7 +256,7 @@ const CHMBody = ({
         />
       </div>
 
-      <div className="mt-10 px-4">
+      <div className="mt-10">
         <HealthGraph
           catManagement={catManagement}
           dates={dates}
@@ -339,7 +266,6 @@ const CHMBody = ({
           currentWeek={currentWeek}
         />
       </div>
-      <button onClick={(prev) => {}}></button>
     </>
   );
 };

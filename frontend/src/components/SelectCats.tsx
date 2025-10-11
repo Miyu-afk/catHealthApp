@@ -1,3 +1,4 @@
+import { useState } from "react";
 import CheckButton from "./CheckButton";
 
 interface CatManagement {
@@ -14,20 +15,28 @@ interface CatManagement {
 interface SelectCatsProps {
   catList:Record<number, CatManagement[]>;
   targetCat: CatManagement;
-  onSelect: (cat: CatManagement) => void;
+  selectTargetCat: (cat: CatManagement) => void;
 }
 
-const SelectCats = ({catList, targetCat, onSelect} : SelectCatsProps) => {
-  const cats = Object.values(catList).flat();
+const SelectCats = ({catList, targetCat, selectTargetCat} : SelectCatsProps) => {
+ 
+  // const cats = catList[1]
+
+  // for(let i = 0; i <= cats.length; i++){
+  //   const catsName = cats[i].name;    
+  // }
+
   if (!catList || Object.keys(catList).length < 2) {
     return null;
-  }  
+  }    
+
+  const [selectedCat, setSelectedCat] = useState<CatManagement>(targetCat);
   
   return (
     <>
       <div className="dropdown dropdown-bottom dropdown-center">
         <div tabIndex={0} role="button" className="btn m-1">
-          {targetCat.name}ちゃん
+          {selectedCat.name}ちゃん
         </div>       
         <ul
           tabIndex={0}
@@ -38,14 +47,14 @@ const SelectCats = ({catList, targetCat, onSelect} : SelectCatsProps) => {
             <li key={cat.id}>
               <a className={targetCat.id === cat.id
               ? "font-bold text-blue-500" : "hover:bg-gray-100"}
-              onClick={() => onSelect(cat)}>
-                {cat.name}ちゃん
+              onClick={() => setSelectedCat(cat)}>
+                {targetCat.name}ちゃん
               </a>
             </li>
           )))}
         </ul>
       </div>
-      <CheckButton onClick={() => onSelect(targetCat)} />
+      <CheckButton onClick={() => (selectTargetCat(selectedCat))} />
     </>
   );
 };

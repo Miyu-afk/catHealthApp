@@ -17,11 +17,13 @@ interface SuccessModalProps {
 }
 
 
+
+
 const SuccessModal = ({ catManagement, SuccessModalOpen }:SuccessModalProps) => {
   if (!catManagement) return null;
   return (
     <>
-    <dialog id="modal" className="modal modal-bottom sm:modal-middle">
+    <dialog id="modal" className="modal">
       <div className="modal-box">
         <h3 className="font-bold text-lg"><CheckButton onClick={SuccessModalOpen} /></h3>
         <p className="py-4">無事、{catManagement.name}ちゃんのけんこう度が保存されました！</p>
