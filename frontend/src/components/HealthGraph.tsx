@@ -52,7 +52,7 @@ function HealthGraph({
   healthValueData,
   catNameData,
   setCurrentWeek,
-  currentWeek
+  currentWeek,
 }: HealthGraphProps) {
   const [week, setWeek] = useState(new Date());
   let weeks = 1;
@@ -125,12 +125,25 @@ function HealthGraph({
       <div className="App" style={divStyle}>
         <Line data={graphData} options={options} id="chart-key" />
       </div>
-      <div className="flex">
-        <button className="justify-items-start" onClick={(e) => {newDate.setDate(newDate.getDate() - weeks * 7);
-    setCurrentWeek(newDate)}}>前へ</button>
-        <button className="justify-items-end" onClick={(e) => {newDate.setDate(newDate.getDate() + weeks * 7);
-    setCurrentWeek(newDate)
-}}>次へ</button>
+      <div className="flex justify-between">
+        <button
+          onClick={(e) => {
+            const prevWeek = new Date(currentWeek);
+            prevWeek.setDate(currentWeek.getDate() - 7);
+            setCurrentWeek(prevWeek);
+          }}
+        >
+          前へ
+        </button>
+        <button
+          onClick={(e) => {
+            const nextWeek = new Date(currentWeek);
+            nextWeek.setDate(currentWeek.getDate() + 7);
+            setCurrentWeek(nextWeek);
+          }}
+        >
+          次へ
+        </button>
       </div>
     </>
   );

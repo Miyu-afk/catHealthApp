@@ -1,3 +1,5 @@
+import CheckButton from "./CheckButton";
+
 interface CatManagement {
   id: number;
   name: string;
@@ -43,6 +45,7 @@ const SelectCats = ({catList, targetCat, onSelect} : SelectCatsProps) => {
           )))}
         </ul>
       </div>
+      <CheckButton onClick={() => onSelect(targetCat)} />
     </>
   );
 };

@@ -13,6 +13,7 @@ import CheckButton from "./CheckButton";
 import NoCheckButton from "./NoCheckButton";
 import SelectCats from "./SelectCats";
 import Memo from "./Memo";
+import styles from "../css/Body.module.scss";
 
 interface CatManagement {
   id: number;
@@ -148,12 +149,12 @@ const CHMBody = ({
         return (
           <>
             <input
-              className="mt-1"
               type="range"
               min="0"
               max="100"
               step="1"
               value={healthValue}
+              className={styles.inputSet}
               onChange={(e) => {
                 setHealthValue(Number(e.target.value));
               }}
@@ -178,7 +179,7 @@ const CHMBody = ({
   return (
     <>
       {Object.values(catList).flat().length > 1 ?(
-      <div className="flex justify-center mt-15 text-2xl">
+      <div className="flex justify-center mt-18 text-2xl">
         <SelectCats catList={catList} targetCat={targetCat} onSelect={setTargetCat}/>
       </div>
       ):null}
@@ -195,7 +196,7 @@ const CHMBody = ({
           </>
         ))}
       </div>
-      <div className="flex w-50">
+      <div className="flex justify-center">
       <Memo  onChange={(e) => {
         const textValue = e.target.value;
         setMemoData(textValue)
@@ -296,7 +297,7 @@ const CHMBody = ({
         </div>
       </div> */}
 
-      <div className="flex justify-center mt-15">
+      <div className="flex justify-center mt-8">
         <CheckButton
           onClick={() => {
             const dataToSave: Partial<CatManagement> = {

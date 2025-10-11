@@ -1,4 +1,4 @@
-import styles from "../css/header.module.scss"
+import styles from "../css/Body.module.scss"
 
 const CHMHeader = () => {
   return (

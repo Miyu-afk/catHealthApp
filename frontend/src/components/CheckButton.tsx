@@ -13,7 +13,7 @@ const CheckButton = ({onClick }: CheckButtonProps) => {
       viewBox="0 0 24 24"
       stroke-width="1.5"
       stroke="currentColor"
-      className="h-10 w-10 "
+      className="h-8 w-8 "
     >
       <path
         stroke-linecap="round"
