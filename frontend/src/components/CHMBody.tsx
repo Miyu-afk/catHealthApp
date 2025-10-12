@@ -34,6 +34,7 @@ interface CHMBodyProps {
   healthValueData: number[];
   catNameData: string[];
   catList: Record<number, CatManagement[]>;
+  handleNameChange: (newCatName:string) => void; 
 }
 
 const CHMBody = ({
@@ -44,6 +45,7 @@ const CHMBody = ({
   dates,
   catNameData,
   catList,
+  handleNameChange,
 }: CHMBodyProps) => {
   if (!catManagement) {
     return (
@@ -65,6 +67,7 @@ const CHMBody = ({
   const [memoData, setMemoData] = useState("");
   const [targetCat, setTargetCat] = useState<CatManagement>(catManagement!);
   const [currentWeek, setCurrentWeek] = useState(new Date());
+  
 
   const healthObj = [
     {
@@ -208,6 +211,7 @@ const CHMBody = ({
           }}
         />
       </div>
+      
 
       <div className="flex justify-center mt-8">
         <CheckButton
@@ -228,12 +232,12 @@ const CHMBody = ({
             }
 
             const dataToSave: Partial<CatManagement> = {
-              name: catManagement.name,
+              name: targetCat.name,
               vitality: healthValue,
               record: new Date().toISOString().split("T")[0],
-              owner_id: catManagement.owner_id,
+              owner_id: targetCat.owner_id,
               ...(memoData.trim() && { memo: memoData }),
-            };
+            };        
 
             if (smileOn) dataToSave.mood = true;
             else if (frownOn) dataToSave.mood = false;
@@ -247,6 +251,7 @@ const CHMBody = ({
             addHealth(dataToSave);
             allClean();
             SuccessModalOpen();
+            handleNameChange(targetCat.name)
           }}
         />
         <NoCheckButton

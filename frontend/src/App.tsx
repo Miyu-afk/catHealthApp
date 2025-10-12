@@ -39,6 +39,8 @@ const App =()=> {
   const[healthValueData, setHealthValueData]= useState<number[]>([]);
   const[catName, setCatName] = useState<string[]>([])
   const[catList, setCatList] = useState<Record<number, CatManagement[]>>({});
+  const[selectedTargetCat, setSelectedTargetCat] = useState("");
+  
 useEffect(() => {
   fetchCat();
 }, []);
@@ -70,7 +72,6 @@ useEffect(() => {
       setCatList(groupedByOwner); 
     });
   };
-  
 
   const addHealth = (newHealthData:Partial<CatManagement>) => {
   fetch(API_URL, {
@@ -86,17 +87,18 @@ useEffect(() => {
   })
 };
 
-
-
+  const handleNameChange = (newCatName:string) => {
+    setSelectedTargetCat(newCatName);
+  }
   
   return (
     <>
       <CHMHeader />
       <CHMBody catManagement={catManagement[0] || null}
-      SuccessModalOpen={openModal} addHealth={addHealth} dates={recordedDates} healthValueData={healthValueData} catNameData={catName} catList={catList} 
+      SuccessModalOpen={openModal} addHealth={addHealth} dates={recordedDates} healthValueData={healthValueData} catNameData={catName} catList={catList} handleNameChange={handleNameChange}
       />
       <SuccessModal catManagement={catManagement[0] || null}
-      SuccessModalOpen={openModal} />
+      SuccessModalOpen={openModal} selectedTargetCat={selectedTargetCat}/>
       <CHMFooter />
     </> 
   )

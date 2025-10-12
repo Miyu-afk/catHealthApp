@@ -34,7 +34,7 @@ app.get("/accounts/login/", (req, res) => {
 app.get("/cats", (req, res) => {
   connection
     .promise()
-    .query("SELECT ch.*, users.name AS username FROM catshealth AS ch INNER JOIN users ON ch.owner_id = users.id") 
+    .query("SELECT ch.*, users.user_name AS usersname FROM catshealth AS ch INNER JOIN users ON ch.owner_id = users.id") 
       .then(([rows, fields]) => {
       res.json(rows);
       })
@@ -44,22 +44,19 @@ app.get("/cats", (req, res) => {
     });
 
 app.post("/cats", async(req, res) => {
-  const { name, mood, poop, meal, vitality, record, owner_id, memo } = req.body;
-  const existingRecord = await connection
+  try{
+    const { name, mood, poop, meal, vitality, record, owner_id, memo } = req.body;
+    const existingRecord = await connection
     .promise()
     .query("SELECT * FROM catsHealth WHERE name = ? AND record = ?" , [
       name,
       record,
     ])
-      .then(([rows, fields]) => {
-      res.json(rows);
-      })
-      .catch((err) => {
-        res.status(500).json({error:err})
-      }); 
 
-  if (existingRecord.length > 0) {
-    await connection.promise().query(
+  if (existingRecord && existingRecord.length > 0) {
+    await connection
+    .promise()
+    .query(
       `UPDATE catsHealth 
   SET mood = ?, poop = ?, meal = ?, vitality = ?, memo = ?
   WHERE name = ? AND record = ?`,
@@ -79,11 +76,15 @@ app.post("/cats", async(req, res) => {
         meal,
         vitality,
         record,
-        owner_id,
         memo,
+        owner_id,
       ])
-      .them(()=> connection.end)
-  }
+    }
+    res.status(200).end();
+  }catch(err) {
+    console.log(err);
+    res.status(500).json({error:err})
+      }; 
 });
 
 app.listen(port, () => {
